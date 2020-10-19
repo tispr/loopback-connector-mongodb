@@ -7,7 +7,7 @@
 
 module.exports = require('should');
 
-const juggler = require('loopback-datasource-juggler');
+const juggler = require('@tispr/loopback-datasource-juggler');
 let DataSource = juggler.DataSource;
 
 const TEST_ENV = process.env.TEST_ENV || 'test';

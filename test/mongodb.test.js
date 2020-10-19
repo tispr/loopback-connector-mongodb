@@ -14,7 +14,7 @@ const sinon = require('sinon');
 const sanitizeFilter = require('../lib/mongodb').sanitizeFilter;
 const trimLeadingDollarSigns = require('../lib/mongodb').trimLeadingDollarSigns;
 
-const GeoPoint = require('loopback-datasource-juggler').GeoPoint;
+const GeoPoint = require('@tispr/loopback-datasource-juggler').GeoPoint;
 
 let Superhero,
   User,

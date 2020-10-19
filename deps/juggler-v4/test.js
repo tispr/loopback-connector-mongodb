@@ -7,7 +7,7 @@
 
 const semver = require('semver');
 const should = require('should');
-const juggler = require('loopback-datasource-juggler');
+const juggler = require('@tispr/loopback-datasource-juggler');
 const name = require('./package.json').name;
 
 require('../../test/init');
@@ -21,13 +21,13 @@ describe(name, function() {
     return global.resetDataSourceClass();
   });
 
-  require('loopback-datasource-juggler/test/common.batch.js');
-  require('loopback-datasource-juggler/test/default-scope.test.js');
-  require('loopback-datasource-juggler/test/include.test.js');
+  require('@tispr/loopback-datasource-juggler/test/common.batch.js');
+  require('@tispr/loopback-datasource-juggler/test/default-scope.test.js');
+  require('@tispr/loopback-datasource-juggler/test/include.test.js');
 
   // === Operation hooks ==== //
 
-  const suite = require('loopback-datasource-juggler/test/persistence-hooks.suite.js');
+  const suite = require('@tispr/loopback-datasource-juggler/test/persistence-hooks.suite.js');
 
   const DB_VERSION = process.env.MONGODB_VERSION;
 
