@@ -48,3 +48,76 @@ global.connectorCapabilities = {
   nilike: false,
   nestedProperty: true,
 };
+
+// TISRP: Add some utils method to simplify tests development <<<
+const _ = require('lodash');
+const chance = require('chance').Chance();
+
+/**
+ * Generate a random model name
+ *
+ * @return {string} A model name
+ */
+function modelName() {
+  return _.upperFirst(_.camelCase(chance.sentence({words: chance.integer({min: 3, max: 5})})));
+}
+
+/**
+ * Generate a random property name
+ *
+ * @return {string} A property name
+ */
+function propertyName() {
+  // The property names can't be the same as any existing in loopback Model properties and functions
+  return uniqueFirstWithout(chance.word, ['id', 'and', 'or', 'nor', 'errors', 'codes']);
+}
+
+/**
+ * Generate an unique value. The function is guarantee that the value
+ * is not the same as any value in the exceptions list
+ *
+ * @param {function} fn A function which generates something random
+ * @param {[*]} exceptions A list of values which should not be generated
+ * @param {object} [options] Any options to pass on to the generator function
+ * @return {*} An unique value
+ */
+function uniqueFirstWithout(fn, exceptions, options) {
+  return _.first(uniqueWithout(fn, 1, exceptions, options));
+}
+
+/**
+ * Generate an array of unique values. The function is guarantee that none values
+ * is the same as any value in the exceptions list
+ *
+ * @param {function} fn A function which generates something random
+ * @param {number} count A count of generated values
+ * @param {[*]} exceptions A list of values which should not be generated
+ * @param {object} [options] Any options to pass on to the generator function
+ * @return {[*]} An array of unique values
+ */
+function uniqueWithout(fn, count, exceptions, options) {
+  // Generate unique values with deep compare
+  const uniqueValues = chance.unique(wrapper, count + exceptions.length, {comparator});
+  return _.take(_.differenceWith(uniqueValues, exceptions, isEqual), count);
+
+  function wrapper() {
+    return fn.call(chance, options);
+  }
+
+  function comparator(arr, value) {
+    return _.some(arr, (el) => isEqual(el, value));
+  }
+
+  function isEqual(el1, el2) {
+    el1 = el1 && el1.toObject ? el1.toObject() : el1;
+    el2 = el2 && el2.toObject ? el2.toObject() : el2;
+    return _.isEqual(el1, el2);
+  }
+}
+
+global.chance = chance;
+global.modelName = modelName;
+global.propertyName = propertyName;
+global.uniqueFirstWithout = uniqueFirstWithout;
+global.uniqueWithout = uniqueWithout;
+// >>>
